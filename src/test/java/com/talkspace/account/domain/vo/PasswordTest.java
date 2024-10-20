@@ -4,7 +4,12 @@ import com.talkspace.account.application.exception.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 
 public class PasswordTest {
   @Test
@@ -45,5 +50,16 @@ public class PasswordTest {
     assertThrows(ValidationException.class, () -> Password.create("Abc!"));
     assertThrows(ValidationException.class, () -> Password.create("Password_1"));
     assertThrows(ValidationException.class, () -> Password.create("Abcdefgh"));
+  }
+
+  @Test
+  @DisplayName("Should be able to catch a NoSuchAlgorithmException")
+  public void should_be_able_to_catch_a_no_such_algorithm_exception() {
+    try (var mock = mockStatic(MessageDigest.class)){
+      mock.when(() -> MessageDigest.getInstance("SHA-256"))
+              .thenThrow(new NoSuchAlgorithmException());
+      RuntimeException exception = assertThrows(RuntimeException.class, () -> Password.create("Valid@123"));
+      assertThat(exception.getMessage()).isEqualTo("SHA-256 algorithm not found");
+    }
   }
 }
