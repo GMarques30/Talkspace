@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.talkspace.account.application.dto.SigninInput;
 import com.talkspace.account.application.dto.SigninOutput;
-import com.talkspace.account.application.exception.InvalidCredentials;
+import com.talkspace.account.application.exception.InvalidCredentialsException;
 import com.talkspace.account.application.repository.AccountRepository;
 import com.talkspace.account.domain.entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,8 @@ public class Signin {
     }
 
     public SigninOutput execute(SigninInput input) {
-        Account account = this.accountRepository.findByEmail(input.email()).orElseThrow(InvalidCredentials::new);
-        if(!account.passwordMatches(input.password())) throw new InvalidCredentials();
+        Account account = this.accountRepository.findByEmail(input.email()).orElseThrow(InvalidCredentialsException::new);
+        if(!account.passwordMatches(input.password())) throw new InvalidCredentialsException();
         Algorithm algorithm = Algorithm.HMAC256(this.secretKey);
         String token = JWT.create()
                 .withIssuer("talkspace-api")

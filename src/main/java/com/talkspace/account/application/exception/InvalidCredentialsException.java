@@ -2,10 +2,10 @@ package com.talkspace.account.application.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class InvalidCredentials extends RuntimeException {
+public class InvalidCredentialsException extends RuntimeException {
     public HttpStatus status;
 
-    public InvalidCredentials() {
+    public InvalidCredentialsException() {
         super("Invalid credentials.");
         this.status = HttpStatus.UNAUTHORIZED;
 

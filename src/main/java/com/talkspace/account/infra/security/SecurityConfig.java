@@ -19,6 +19,8 @@ public class SecurityConfig {
     private SecurityFilter securityFilter;
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
+            "/signup",
+            "/signin"
     };
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {

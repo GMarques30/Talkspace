@@ -2,7 +2,7 @@ package com.talkspace.account.application.usecase;
 
 import com.talkspace.account.application.dto.SigninInput;
 import com.talkspace.account.application.dto.SigninOutput;
-import com.talkspace.account.application.exception.InvalidCredentials;
+import com.talkspace.account.application.exception.InvalidCredentialsException;
 import com.talkspace.account.application.repository.AccountRepository;
 import com.talkspace.account.domain.entity.Account;
 import com.talkspace.account.infra.repository.AccountRepositoryMemory;
@@ -47,7 +47,7 @@ public class SigninTest {
     @Test
     @DisplayName("Should not be able to sign in without an existing account")
     public void should_not_be_able_to_sign_in_without_an_existing_account() {
-        assertThrows(InvalidCredentials.class, () -> this.sut.execute(new SigninInput("john.doe@example.com", "John@123")));
+        assertThrows(InvalidCredentialsException.class, () -> this.sut.execute(new SigninInput("john.doe@example.com", "John@123")));
     }
 
     @Test
@@ -55,6 +55,6 @@ public class SigninTest {
     public void should_not_be_able_to_sign_in_with_a_password_other_than_the_one_registered() {
         Account account = new Account("John", "Doe", "john.doe@example.com", "John@123");
         this.accountRepository.save(account);
-        assertThrows(InvalidCredentials.class, () -> this.sut.execute(new SigninInput(account.getEmail(), "John@12345")));
+        assertThrows(InvalidCredentialsException.class, () -> this.sut.execute(new SigninInput(account.getEmail(), "John@12345")));
     }
 }

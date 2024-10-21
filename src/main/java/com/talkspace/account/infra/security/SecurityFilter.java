@@ -33,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             if(token == null) throw new RuntimeException("The token is missing.");
             String accountId = this.validateToken(token);
             Account account = this.accountRepository.findByAccountId(accountId).orElseThrow(RuntimeException::new);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(account, null);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(account.accountId, null);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         filterChain.doFilter(request, response);
