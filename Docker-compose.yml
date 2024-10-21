@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  talkspace:
+    container_name: talkspace-api
+    build:
+      context: ./
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    networks:
+      - talkspace-network
+    command:
+      [
+        "sh",
+        "-c",
+        "until nc -z postgres 5432; do sleep 1; done; java -jar app.jar",
+      ]
+
+  postgres:
+    image: postgres:14.3-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: app
+    ports:
+      - 5432:5432
+    networks:
+      - talkspace-network
+    volumes:
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  talkspace-network:
+    driver: bridge

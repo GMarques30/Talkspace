@@ -22,6 +22,14 @@ public class Account {
     this.createdAt = LocalDateTime.now().toString();
   }
 
+  public Account(String accountId, String firstName, String lastName, String email, String password, String createdAt) {
+    this.accountId = accountId;
+    this.name = new Name(firstName, lastName);
+    this.email = new Email(email);
+    this.password = Password.restore(password);
+    this.createdAt = createdAt;
+  }
+
   public String getFirstName() {
     return this.name.getFirstName();
   }

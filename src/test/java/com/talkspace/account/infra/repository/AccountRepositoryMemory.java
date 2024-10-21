@@ -23,4 +23,9 @@ public class AccountRepositoryMemory implements AccountRepository {
   public Optional<Account> findByEmail(String email) {
     return this.accounts.stream().filter(account -> account.getEmail().equals(email)).findFirst();
   }
+
+  @Override
+  public Optional<Account> findByAccountId(String accountId) {
+    return this.accounts.stream().filter(account -> account.accountId.equals(accountId)).findFirst();
+  }
 }
